@@ -81,7 +81,10 @@
                         Drive: <strong>${selectedJob.jobTitle}</strong> (${selectedJob.packageLpa} LPA) • Organization: <strong>${company.companyName}</strong>
                     </p>
                 </div>
-                <div style="display: flex; gap: 0.75rem;">
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <a href="${pageContext.request.contextPath}/recruiter/export/applicants?jobId=${selectedJob.id}" class="btn btn-outline">
+                        📥 Export CSV
+                    </a>
                     <a href="${pageContext.request.contextPath}/recruiter/rounds?jobId=${selectedJob.id}" class="btn btn-primary">
                         🎯 Manage Interview Rounds (${rounds.size()}) &rarr;
                     </a>

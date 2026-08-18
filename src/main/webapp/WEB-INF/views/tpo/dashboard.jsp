@@ -60,6 +60,7 @@
                 <li><a href="${pageContext.request.contextPath}/tpo/students" class="nav-link">Students</a></li>
                 <li><a href="${pageContext.request.contextPath}/tpo/companies" class="nav-link">Companies</a></li>
                 <li><a href="${pageContext.request.contextPath}/tpo/drives" class="nav-link">Placement Drives</a></li>
+                <li><a href="${pageContext.request.contextPath}/tpo/analytics" class="nav-link">Analytics</a></li>
                 <li><a href="${pageContext.request.contextPath}/auth/logout" class="btn btn-outline" style="font-size: 0.85rem;">Sign Out</a></li>
             </ul>
         </div>
@@ -76,9 +77,12 @@
                         <span class="status-badge ok" style="margin-left: 0.5rem;">ADMINISTRATOR</span>
                     </p>
                 </div>
-                <div style="display: flex; gap: 0.75rem;">
-                    <a href="${pageContext.request.contextPath}/db-test" class="btn btn-outline">
-                        🗄️ DB Diagnostics
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <a href="${pageContext.request.contextPath}/tpo/export/students" class="btn btn-outline">
+                        📥 Export Roster (CSV)
+                    </a>
+                    <a href="${pageContext.request.contextPath}/tpo/analytics" class="btn btn-primary">
+                        📊 Placement Analytics
                     </a>
                 </div>
             </div>
@@ -115,6 +119,13 @@
 
         <!-- Management Modules Quick Access -->
         <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">Placement Analytics & Accreditation</h3>
+                <p class="card-text">View real-time salary distribution, highest packages, and NIRF / NAAC departmental reports.</p>
+                <a href="${pageContext.request.contextPath}/tpo/analytics" class="btn btn-primary">View Intelligence &rarr;</a>
+            </div>
+
             <div class="card">
                 <div class="card-icon">👨‍🎓</div>
                 <h3 class="card-title">Student Verification Roster</h3>
