@@ -66,6 +66,8 @@
             <ul class="nav-links">
                 <li><a href="${pageContext.request.contextPath}/student/dashboard" class="nav-link" style="color: var(--primary); font-weight: 700;">Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/student/profile" class="nav-link">My Profile</a></li>
+                <li><a href="${pageContext.request.contextPath}/student/drives" class="nav-link">Placement Drives</a></li>
+                <li><a href="${pageContext.request.contextPath}/student/applications" class="nav-link">My Applications</a></li>
                 <li><a href="${pageContext.request.contextPath}/auth/logout" class="btn btn-outline" style="font-size: 0.85rem;">Sign Out</a></li>
             </ul>
         </div>
@@ -84,9 +86,9 @@
                         <span class="status-badge ok" style="margin-left: 0.5rem;">ACTIVE CANDIDATE</span>
                     </p>
                 </div>
-                <div>
-                    <a href="${pageContext.request.contextPath}/student/profile" class="btn btn-primary">
-                        ✏️ Edit Academic Profile
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="${pageContext.request.contextPath}/student/drives" class="btn btn-primary">
+                        🔍 Browse Live Drives (${activeDrives})
                     </a>
                 </div>
             </div>
@@ -114,21 +116,19 @@
         <!-- Quick Stats Grid -->
         <div class="stat-grid">
             <div class="stat-card">
+                <div class="stat-label">Active Campus Drives</div>
+                <div class="stat-value">${activeDrives}</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);"><a href="${pageContext.request.contextPath}/student/drives" style="color: var(--primary); text-decoration: none;">View Open Drives &rarr;</a></p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Applied Jobs</div>
+                <div class="stat-value">${appliedCount}</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);"><a href="${pageContext.request.contextPath}/student/applications" style="color: var(--primary); text-decoration: none;">Track Applications &rarr;</a></p>
+            </div>
+            <div class="stat-card">
                 <div class="stat-label">Current CGPA</div>
                 <div class="stat-value">${profile.cgpa}</div>
                 <p style="font-size: 0.85rem; color: var(--text-secondary);">Department: <strong>${profile.department}</strong></p>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Active Backlogs</div>
-                <div class="stat-value" style="color: ${profile.activeBacklogs == 0 ? 'var(--success)' : 'var(--danger)'};">
-                    ${profile.activeBacklogs}
-                </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">History: ${profile.totalBacklogsHistory} backlogs</p>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Profile Completeness</div>
-                <div class="stat-value">${profile.completionPercentage}%</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Graduation: <strong>${profile.graduationYear}</strong></p>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Verification Status</div>
