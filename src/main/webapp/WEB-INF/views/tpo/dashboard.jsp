@@ -60,7 +60,6 @@
                 <li><a href="${pageContext.request.contextPath}/tpo/students" class="nav-link">Students</a></li>
                 <li><a href="${pageContext.request.contextPath}/tpo/companies" class="nav-link">Companies</a></li>
                 <li><a href="${pageContext.request.contextPath}/tpo/drives" class="nav-link">Placement Drives</a></li>
-                <li><a href="${pageContext.request.contextPath}/tpo/reports" class="nav-link">Analytics</a></li>
                 <li><a href="${pageContext.request.contextPath}/auth/logout" class="btn btn-outline" style="font-size: 0.85rem;">Sign Out</a></li>
             </ul>
         </div>
@@ -92,22 +91,24 @@
         <div class="stat-grid">
             <div class="stat-card">
                 <div class="stat-label">Registered Students</div>
-                <div class="stat-value">1</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Batch of 2026</p>
+                <div class="stat-value">${totalStudents}</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    <strong>${verifiedStudentsCount}</strong> Verified by TPO
+                </p>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Partner Companies</div>
-                <div class="stat-value">1</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Verified recruiters</p>
+                <div class="stat-value">${totalCompanies}</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Hiring Organizations</p>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Active Drives</div>
-                <div class="stat-value">1</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Open for application</p>
+                <div class="stat-value">${activeDrives}</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Live recruitment drives</p>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Placement Percentage</div>
-                <div class="stat-value" style="color: var(--success);">0.0 %</div>
+                <div class="stat-label">Placement System</div>
+                <div class="stat-value" style="font-size: 1.35rem; color: var(--success); margin: 0.85rem 0;">OPERATIONAL ✓</div>
                 <p style="font-size: 0.85rem; color: var(--text-secondary);">Recruitment season live</p>
             </div>
         </div>
@@ -116,23 +117,23 @@
         <div class="card-grid">
             <div class="card">
                 <div class="card-icon">👨‍🎓</div>
-                <h3 class="card-title">Student Verification</h3>
+                <h3 class="card-title">Student Verification Roster</h3>
                 <p class="card-text">Audit academic marks, verify CGPA against official transcripts, and approve resumes.</p>
-                <a href="${pageContext.request.contextPath}/tpo/students" class="btn btn-outline">Review Students &rarr;</a>
+                <a href="${pageContext.request.contextPath}/tpo/students" class="btn btn-outline">Audit Students (${totalStudents}) &rarr;</a>
             </div>
 
             <div class="card">
                 <div class="card-icon">🏢</div>
-                <h3 class="card-title">Company Onboarding</h3>
+                <h3 class="card-title">Partner Companies</h3>
                 <p class="card-text">Approve new company registrations, verify recruiter credentials, and manage relationships.</p>
-                <a href="${pageContext.request.contextPath}/tpo/companies" class="btn btn-outline">Manage Companies &rarr;</a>
+                <a href="${pageContext.request.contextPath}/tpo/companies" class="btn btn-outline">Manage Companies (${totalCompanies}) &rarr;</a>
             </div>
 
             <div class="card">
-                <div class="card-icon">📊</div>
-                <h3 class="card-title">Placement Reports</h3>
-                <p class="card-text">Generate branch-wise placement statistics, package histograms, and export CSV/PDF reports.</p>
-                <a href="${pageContext.request.contextPath}/tpo/reports" class="btn btn-outline">View Reports &rarr;</a>
+                <div class="card-icon">💼</div>
+                <h3 class="card-title">Campus Placement Drives</h3>
+                <p class="card-text">Oversee active drives, compensation packages, and eligibility criteria cutoffs.</p>
+                <a href="${pageContext.request.contextPath}/tpo/drives" class="btn btn-outline">View All Drives (${activeDrives}) &rarr;</a>
             </div>
         </div>
     </main>
