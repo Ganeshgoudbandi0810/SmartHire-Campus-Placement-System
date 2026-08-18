@@ -1,0 +1,34 @@
+# Compiled Java classes
+target/
+*.class
+
+# Package Files
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Log files
+*.log
+logs/
+
+# IDE & Editor files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Sensitive configuration files (passwords, credentials)
+src/main/resources/database.properties
+src/main/resources/db.properties
+.env
