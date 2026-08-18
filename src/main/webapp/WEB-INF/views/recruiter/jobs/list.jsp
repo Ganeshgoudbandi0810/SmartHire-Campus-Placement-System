@@ -143,9 +143,9 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="brand-badge" style="font-size: 0.85rem;">
-                                            👥 ${job.applicantCount} Candidates
-                                        </span>
+                                        <a href="${pageContext.request.contextPath}/recruiter/applicants?jobId=${job.id}" class="brand-badge" style="font-size: 0.85rem; text-decoration: none;">
+                                            👥 ${job.applicantCount} Candidates &rarr;
+                                        </a>
                                     </td>
                                     <td>
                                         <c:choose>
@@ -160,23 +160,31 @@
                                         </c:choose>
                                     </td>
                                     <td>
-                                        <form action="${pageContext.request.contextPath}/recruiter/jobs/status" method="POST" style="display: inline;">
-                                            <input type="hidden" name="jobId" value="${job.id}">
-                                            <c:choose>
-                                                <c:when test="${job.status == 'OPEN'}">
-                                                    <input type="hidden" name="status" value="CLOSED">
-                                                    <button type="submit" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
-                                                        Close Drive
-                                                    </button>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <input type="hidden" name="status" value="OPEN">
-                                                    <button type="submit" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
-                                                        Reopen Drive
-                                                    </button>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </form>
+                                        <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                                            <a href="${pageContext.request.contextPath}/recruiter/applicants?jobId=${job.id}" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+                                                👥 Review
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/recruiter/rounds?jobId=${job.id}" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+                                                🎯 Rounds
+                                            </a>
+                                            <form action="${pageContext.request.contextPath}/recruiter/jobs/status" method="POST" style="display: inline;">
+                                                <input type="hidden" name="jobId" value="${job.id}">
+                                                <c:choose>
+                                                    <c:when test="${job.status == 'OPEN'}">
+                                                        <input type="hidden" name="status" value="CLOSED">
+                                                        <button type="submit" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+                                                            Close
+                                                        </button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <input type="hidden" name="status" value="OPEN">
+                                                        <button type="submit" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+                                                            Reopen
+                                                        </button>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>
