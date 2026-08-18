@@ -32,3 +32,8 @@ Desktop.ini
 src/main/resources/database.properties
 src/main/resources/db.properties
 .env
+
+# Server & Upload binaries
+tomcat/
+uploads/
+

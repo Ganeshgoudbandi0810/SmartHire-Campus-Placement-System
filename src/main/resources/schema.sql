@@ -189,15 +189,15 @@ CREATE TABLE IF NOT EXISTS `application_round_history` (
 -- ============================================================================
 
 -- 1. Default Placement Officer (TPO Admin)
--- Email: admin@smarthire.edu | Password: Password@123 (hash: $2a$10$wE8A6.Vd2KkX0r8ZtQp2he/Xp7V.d1JzQ8uB1U8f2R9g6K5L3M2N.)
+-- Email: admin@smarthire.edu | Password: Password@123 (hash: $2a$10$4Bqk2lWhXXrjgK45JzvtOe9UvkvJxNX9JySvkDfI0Mi/YDTPa/4Di)
 INSERT INTO `users` (`id`, `email`, `password_hash`, `role`, `status`) VALUES
-(1, 'admin@smarthire.edu', '$2a$10$wE8A6.Vd2KkX0r8ZtQp2he/Xp7V.d1JzQ8uB1U8f2R9g6K5L3M2N.', 'TPO_ADMIN', 'ACTIVE')
+(1, 'admin@smarthire.edu', '$2a$10$4Bqk2lWhXXrjgK45JzvtOe9UvkvJxNX9JySvkDfI0Mi/YDTPa/4Di', 'TPO_ADMIN', 'ACTIVE')
 ON DUPLICATE KEY UPDATE `id`=`id`;
 
 -- 2. Sample Student Account
 -- Email: rahul.verma@smarthire.edu | Password: Password@123
 INSERT INTO `users` (`id`, `email`, `password_hash`, `role`, `status`) VALUES
-(2, 'rahul.verma@smarthire.edu', '$2a$10$wE8A6.Vd2KkX0r8ZtQp2he/Xp7V.d1JzQ8uB1U8f2R9g6K5L3M2N.', 'STUDENT', 'ACTIVE')
+(2, 'rahul.verma@smarthire.edu', '$2a$10$4Bqk2lWhXXrjgK45JzvtOe9UvkvJxNX9JySvkDfI0Mi/YDTPa/4Di', 'STUDENT', 'ACTIVE')
 ON DUPLICATE KEY UPDATE `id`=`id`;
 
 INSERT INTO `student_profiles` (
@@ -213,7 +213,7 @@ INSERT INTO `student_profiles` (
 -- 3. Sample Recruiter Account & Company
 -- Email: recruiter@techcorp.com | Password: Password@123
 INSERT INTO `users` (`id`, `email`, `password_hash`, `role`, `status`) VALUES
-(3, 'recruiter@techcorp.com', '$2a$10$wE8A6.Vd2KkX0r8ZtQp2he/Xp7V.d1JzQ8uB1U8f2R9g6K5L3M2N.', 'RECRUITER', 'ACTIVE')
+(3, 'recruiter@techcorp.com', '$2a$10$4Bqk2lWhXXrjgK45JzvtOe9UvkvJxNX9JySvkDfI0Mi/YDTPa/4Di', 'RECRUITER', 'ACTIVE')
 ON DUPLICATE KEY UPDATE `id`=`id`;
 
 INSERT INTO `companies` (
