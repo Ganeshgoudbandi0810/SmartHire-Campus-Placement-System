@@ -45,6 +45,14 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+        .profile-summary-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-sm);
+        }
     </style>
 </head>
 <body>
@@ -58,8 +66,6 @@
             <ul class="nav-links">
                 <li><a href="${pageContext.request.contextPath}/student/dashboard" class="nav-link" style="color: var(--primary); font-weight: 700;">Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/student/profile" class="nav-link">My Profile</a></li>
-                <li><a href="${pageContext.request.contextPath}/student/drives" class="nav-link">Placement Drives</a></li>
-                <li><a href="${pageContext.request.contextPath}/student/applications" class="nav-link">My Applications</a></li>
                 <li><a href="${pageContext.request.contextPath}/auth/logout" class="btn btn-outline" style="font-size: 0.85rem;">Sign Out</a></li>
             </ul>
         </div>
@@ -70,10 +76,12 @@
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    <h1 class="user-welcome-title">Welcome back, Student!</h1>
+                    <h1 class="user-welcome-title">
+                        Welcome back, ${not empty profile.firstName ? profile.fullName : 'Candidate'}!
+                    </h1>
                     <p style="color: var(--text-secondary); font-size: 0.95rem;">
                         Logged in as: <strong>${sessionScope.currentUser.email}</strong> 
-                        <span class="status-badge ok" style="margin-left: 0.5rem;">ACTIVE ACCOUNT</span>
+                        <span class="status-badge ok" style="margin-left: 0.5rem;">ACTIVE CANDIDATE</span>
                     </p>
                 </div>
                 <div>
@@ -87,54 +95,101 @@
 
     <!-- Main Content -->
     <main class="container">
+
+        <!-- Quick Profile Warning if incomplete -->
+        <c:if test="${profile.completionPercentage < 80}">
+            <div style="background-color: var(--warning-light); border: 1px solid var(--warning); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="color: var(--warning); font-size: 1.05rem; margin-bottom: 0.25rem;">⚠️ Profile Incomplete (${profile.completionPercentage}%)</h3>
+                    <p style="color: var(--text-primary); font-size: 0.9rem;">
+                        Please complete your academic records (CGPA, marks, department) and upload your resume to qualify for campus placement drives.
+                    </p>
+                </div>
+                <a href="${pageContext.request.contextPath}/student/profile" class="btn btn-primary" style="font-size: 0.85rem;">
+                    Complete Profile &rarr;
+                </a>
+            </div>
+        </c:if>
+
         <!-- Quick Stats Grid -->
         <div class="stat-grid">
             <div class="stat-card">
-                <div class="stat-label">Active Drives</div>
-                <div class="stat-value">1</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Live companies hiring</p>
+                <div class="stat-label">Current CGPA</div>
+                <div class="stat-value">${profile.cgpa}</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Department: <strong>${profile.department}</strong></p>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Applied Jobs</div>
-                <div class="stat-value">0</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Applications in progress</p>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Interviews Scheduled</div>
-                <div class="stat-value">0</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Upcoming interview rounds</p>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Profile Verification</div>
-                <div class="stat-value" style="font-size: 1.35rem; color: var(--success); margin: 0.85rem 0;">VERIFIED ✓</div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Approved by Placement Cell</p>
-            </div>
-        </div>
-
-        <!-- Section: Available Drives Spotlight -->
-        <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <div>
-                    <h2 style="font-size: 1.35rem; font-weight: 700;">Featured Placement Drive</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Check eligibility and apply in Stage 3–5</p>
+                <div class="stat-label">Active Backlogs</div>
+                <div class="stat-value" style="color: ${profile.activeBacklogs == 0 ? 'var(--success)' : 'var(--danger)'};">
+                    ${profile.activeBacklogs}
                 </div>
-                <span class="brand-badge">TechCorp Solutions</span>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">History: ${profile.totalBacklogsHistory} backlogs</p>
             </div>
-
-            <div style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
-                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
-                    Associate Software Engineer (Java / Backend)
-                </h3>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
-                    Package: <strong>9.50 LPA</strong> | Location: <strong>Bangalore / Hybrid</strong> | Eligible Branches: <strong>CSE, IT, ECE</strong>
+            <div class="stat-card">
+                <div class="stat-label">Profile Completeness</div>
+                <div class="stat-value">${profile.completionPercentage}%</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Graduation: <strong>${profile.graduationYear}</strong></p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Verification Status</div>
+                <div class="stat-value" style="font-size: 1.35rem; color: ${profile.verified ? 'var(--success)' : 'var(--warning)'}; margin: 0.85rem 0;">
+                    ${profile.verified ? 'VERIFIED ✓' : 'PENDING ⏳'}
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    ${profile.verified ? 'Approved by Placement Cell' : 'Awaiting TPO Review'}
                 </p>
-                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                    <span class="brand-badge">Min CGPA: 7.50</span>
-                    <span class="brand-badge">Max Backlogs: 0</span>
-                    <span class="brand-badge">Batch: 2026</span>
-                </div>
             </div>
         </div>
+
+        <!-- Section: Academic Profile Snapshot -->
+        <div class="profile-summary-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                <h2 style="font-size: 1.25rem; font-weight: 700;">Candidate Academic Summary</h2>
+                <a href="${pageContext.request.contextPath}/student/profile" class="btn btn-outline" style="font-size: 0.85rem;">
+                    Update Details &rarr;
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Roll Number</span>
+                    <p style="font-weight: 700; font-size: 1.05rem;">${profile.rollNumber}</p>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">10th Percentage</span>
+                    <p style="font-weight: 700; font-size: 1.05rem;">${profile.tenthPercentage}%</p>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">12th / Diploma</span>
+                    <p style="font-weight: 700; font-size: 1.05rem;">${profile.twelfthPercentage}%</p>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Resume Document</span>
+                    <p style="font-weight: 700; font-size: 0.95rem;">
+                        <c:choose>
+                            <c:when test="${not empty profile.resumeFilePath}">
+                                <a href="${pageContext.request.contextPath}/student/resume/download" target="_blank" style="color: var(--primary); text-decoration: none;">
+                                    📎 View Uploaded PDF
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <span style="color: var(--danger);">No Resume Attached</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
+                </div>
+            </div>
+
+            <c:if test="${not empty profile.skills}">
+                <div style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem;">
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.35rem;">
+                        Technical Skills
+                    </span>
+                    <p style="font-size: 0.95rem; color: var(--text-primary);">${profile.skills}</p>
+                </div>
+            </c:if>
+        </div>
+
     </main>
 
     <!-- Footer -->
