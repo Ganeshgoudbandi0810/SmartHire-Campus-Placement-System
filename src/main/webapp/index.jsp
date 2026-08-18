@@ -19,6 +19,7 @@
             <ul class="nav-links">
                 <li><a href="${pageContext.request.contextPath}/" class="nav-link">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/health" class="nav-link">System Health</a></li>
+                <li><a href="${pageContext.request.contextPath}/db-test" class="nav-link">Database Health</a></li>
                 <li><a href="${pageContext.request.contextPath}/auth/login" class="btn btn-outline">Log In</a></li>
                 <li><a href="${pageContext.request.contextPath}/auth/register" class="btn btn-primary">Sign Up</a></li>
             </ul>
@@ -35,10 +36,10 @@
             </p>
             <div class="hero-actions">
                 <a href="${pageContext.request.contextPath}/health" class="btn btn-primary">
-                    🩺 Check Runtime Health
+                    🩺 System Diagnostics
                 </a>
-                <a href="#roles" class="btn btn-outline">
-                    Explore Roles & Modules
+                <a href="${pageContext.request.contextPath}/db-test" class="btn btn-outline">
+                    🗄️ Database Health
                 </a>
             </div>
         </div>

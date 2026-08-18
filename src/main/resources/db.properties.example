@@ -1,0 +1,18 @@
+# ============================================================================
+# SmartHire - Database & Connection Pool Configuration Template
+# Copy this file to 'db.properties' and set your local MySQL credentials.
+# ============================================================================
+
+# Database Connection Settings
+db.driver=com.mysql.cj.jdbc.Driver
+db.url=jdbc:mysql://localhost:3306/smarthire_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+db.username=root
+db.password=YOUR_MYSQL_PASSWORD
+
+# HikariCP Connection Pool Tuning
+hikari.maximumPoolSize=10
+hikari.minimumIdle=2
+hikari.idleTimeout=30000
+hikari.connectionTimeout=10000
+hikari.maxLifetime=1800000
+hikari.poolName=SmartHireHikariPool
