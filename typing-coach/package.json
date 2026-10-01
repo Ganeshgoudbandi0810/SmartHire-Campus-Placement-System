@@ -1,0 +1,20 @@
+{
+  "name": "monkeytype-coach",
+  "version": "1.0.0",
+  "description": "Local typing practice coach for Monkeytype users focusing on accuracy-first coaching, mistake pattern analysis, and targeted drills",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "typing",
+    "monkeytype",
+    "coach",
+    "wpm",
+    "accuracy",
+    "practice"
+  ],
+  "author": "",
+  "license": "MIT"
+}

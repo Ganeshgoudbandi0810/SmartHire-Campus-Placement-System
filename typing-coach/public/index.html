@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="serika">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Practice Coach — Monkeytype Companion</title>
+  <meta name="description" content="Local typing coach to help you systematically improve on Monkeytype through mistake pattern analysis, accuracy-first pacing, and custom targeted drills.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">🎯</div>
+        <div>
+          <h1 class="brand-title">Monkeytype <span>Coach</span></h1>
+          <p class="brand-subtitle">Accuracy-First Training &amp; Mistake Diagnostics</p>
+        </div>
+      </div>
+
+      <nav class="navbar" aria-label="Main Navigation">
+        <button type="button" class="nav-btn active" data-tab="dashboard">
+          <span>📊</span> Dashboard
+        </button>
+        <button type="button" class="nav-btn" data-tab="log">
+          <span>✏️</span> Log Result
+        </button>
+        <button type="button" class="nav-btn" data-tab="practice">
+          <span>⚡</span> Practice Arena
+        </button>
+        <button type="button" class="nav-btn" data-tab="heatmap">
+          <span>⌨️</span> Mistake Heatmap
+        </button>
+        <button type="button" class="nav-btn" data-tab="settings">
+          <span>⚙️</span> Settings
+        </button>
+      </nav>
+    </header>
+
+    <!-- ========================================================
+         VIEW 1: DASHBOARD & PROGRESS
+         ======================================================== -->
+    <main id="view-dashboard" class="view-section active">
+      <!-- Coach Advice Banner -->
+      <section class="coach-banner" id="coach-banner" aria-label="Typing Coach Advice">
+        <div class="coach-banner-content">
+          <div class="coach-header-row">
+            <span class="coach-badge badge-neutral" id="coach-badge">COACH ADVICE</span>
+            <h2 class="coach-headline" id="coach-headline">Welcome to your Typing Practice Coach</h2>
+          </div>
+          <p class="coach-message" id="coach-message">
+            Log your Monkeytype results to unlock mistake analysis and personalized pacing guidance.
+          </p>
+        </div>
+        <button type="button" class="btn-coach-action" id="btn-coach-action">⚡ Train Recommended Drill</button>
+      </section>
+
+      <!-- Key Metrics Grid -->
+      <section class="metrics-grid" aria-label="Performance Metrics">
+        <div class="metric-card">
+          <div class="metric-label">Average Speed</div>
+          <div class="metric-value" id="metric-avg-wpm">—</div>
+          <div class="metric-sub">Words per minute</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Peak Speed</div>
+          <div class="metric-value" id="metric-peak-wpm">—</div>
+          <div class="metric-sub">Personal best WPM</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Average Accuracy</div>
+          <div class="metric-value" id="metric-avg-acc">—</div>
+          <div class="metric-sub" id="metric-target-status">96% Target</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Training Volume</div>
+          <div class="metric-value" id="metric-test-count">0 Tests</div>
+          <div class="metric-sub">Saved locally</div>
+        </div>
+      </section>
+
+      <!-- Progress Chart -->
+      <section class="card-section">
+        <div class="section-header">
+          <h2 class="section-title">📈 Progression Over Time</h2>
+          <div class="chart-filters" role="group" aria-label="Chart Mode Filters">
+            <button type="button" class="filter-btn active" data-filter="all">All Modes</button>
+            <button type="button" class="filter-btn" data-filter="time 60">60s</button>
+            <button type="button" class="filter-btn" data-filter="time 15">15s</button>
+            <button type="button" class="filter-btn" data-filter="words 50">50 Words</button>
+            <button type="button" class="filter-btn" data-filter="words 25">25 Words</button>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <canvas id="progressChart" class="chart-canvas" width="900" height="300"></canvas>
+          <div id="chartTooltip" class="chart-tooltip"></div>
+        </div>
+
+        <div class="chart-legend">
+          <div class="legend-item"><span class="legend-dot wpm"></span> WPM (Gross/Net)</div>
+          <div class="legend-item"><span class="legend-dot ma"></span> 3-Test Moving Average</div>
+          <div class="legend-item"><span class="legend-dot acc"></span> Accuracy % (Dotted)</div>
+        </div>
+      </section>
+
+      <!-- Recent Tests Table -->
+      <section class="card-section">
+        <div class="section-header">
+          <h2 class="section-title">⏱️ Recent Test History</h2>
+          <button type="button" class="btn-secondary" onclick="document.querySelector('[data-tab=log]').click()">+ Add Test</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date / Time</th>
+                <th>WPM</th>
+                <th>Accuracy</th>
+                <th>Mode</th>
+                <th>Missed Words / Keys</th>
+                <th>Notes</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="table-recent-body">
+              <tr><td colspan="7" class="text-center text-muted">Loading test history...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========================================================
+         VIEW 2: LOG MONKEYTYPE RESULT
+         ======================================================== -->
+    <section id="view-log" class="view-section">
+      <div class="log-layout-grid">
+        <!-- Quick Smart Paste Card -->
+        <div class="card-section">
+          <h2 class="section-title">📋 Smart Paste From Monkeytype</h2>
+          <p class="field-hint" style="margin-bottom: 14px;">
+            Copy your Monkeytype result screen text (e.g. <code>wpm: 75 acc: 97% time 60s missed: rhythm, separate</code>) or paste missed words directly:
+          </p>
+
+          <div class="form-group">
+            <textarea id="smart-paste-box" placeholder="e.g. 78 wpm  97% acc  time 60  missed: receive, calendar, q" rows="5"></textarea>
+          </div>
+
+          <button type="button" class="btn-secondary" id="btn-parse-paste" style="width: 100%;">
+            ⚡ Auto-Extract &amp; Populate Fields
+          </button>
+          <div id="paste-feedback" class="paste-feedback"></div>
+
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <h3 style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 6px;">💡 How to log quickly:</h3>
+            <ul style="font-size: 0.78rem; color: var(--text-muted); padding-left: 18px; line-height: 1.6;">
+              <li>On Monkeytype after finishing a test, click the info / missed words section.</li>
+              <li>Or just type the numbers manually in the form to the right.</li>
+              <li>The coach logs missed characters and words to build your personalized training drills.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Manual Entry Form -->
+        <div class="card-section">
+          <h2 class="section-title">✍️ Test Entry Form</h2>
+          <form id="form-log-result">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="log-wpm">Speed (WPM) *</label>
+                <input type="number" id="log-wpm" step="0.1" min="0" max="350" placeholder="e.g. 74.5" required>
+              </div>
+              <div class="form-group">
+                <label for="log-accuracy">Accuracy (%) *</label>
+                <input type="number" id="log-accuracy" step="0.1" min="0" max="100" placeholder="e.g. 96.5" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="log-mode">Test Mode</label>
+              <select id="log-mode">
+                <option value="time 60">Time 60s</option>
+                <option value="time 15">Time 15s</option>
+                <option value="time 30">Time 30s</option>
+                <option value="time 120">Time 120s</option>
+                <option value="words 25">Words 25</option>
+                <option value="words 50">Words 50</option>
+                <option value="words 100">Words 100</option>
+                <option value="quote">Quote</option>
+                <option value="custom">Custom / Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="log-missed-words">Missed Words</label>
+              <input type="text" id="log-missed-words" placeholder="e.g. rhythm, accommodation, privilege">
+              <div class="field-hint">Separate words with commas or spaces</div>
+            </div>
+
+            <div class="form-group">
+              <label for="log-missed-chars">Missed Characters / Keys</label>
+              <input type="text" id="log-missed-chars" placeholder="e.g. p, q, z, x">
+              <div class="field-hint">Tricky keys you stumbled on (optional)</div>
+            </div>
+
+            <div class="form-group">
+              <label for="log-notes">Session Notes</label>
+              <input type="text" id="log-notes" placeholder="e.g. Cold hands, focused on pinky finger transitions">
+            </div>
+
+            <button type="submit" class="btn-primary">💾 Save &amp; Update Coach</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 3: INTERACTIVE PRACTICE ARENA
+         ======================================================== -->
+    <section id="view-practice" class="view-section">
+      <!-- Drill Controls -->
+      <div class="practice-header">
+        <div class="drill-controls-bar" role="group" aria-label="Drill Type Selector">
+          <button type="button" class="drill-type-btn active" data-drill-type="auto">⚡ Coach's Pick</button>
+          <button type="button" class="drill-type-btn" data-drill-type="keys">🎯 Key Isolation</button>
+          <button type="button" class="drill-type-btn" data-drill-type="ngrams">🔗 N-Gram Pairs</button>
+          <button type="button" class="drill-type-btn" data-drill-type="words">📖 Problem Words</button>
+          <button type="button" class="drill-type-btn" data-drill-type="cadence">🎵 Rhythm &amp; Cadence</button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-secondary" id="btn-restart-drill" title="Restart current drill">🔄 Restart</button>
+          <button type="button" class="btn-secondary" id="btn-next-drill" title="Generate next drill">Next ⏩</button>
+        </div>
+      </div>
+
+      <!-- Active Drill Description Banner -->
+      <div style="margin-bottom: 16px;">
+        <h3 id="drill-title" style="font-size: 1.1rem; color: var(--accent); margin-bottom: 4px;">Loading Drill...</h3>
+        <p id="drill-explanation" style="font-size: 0.85rem; color: var(--text-sub);">Targeting your recent mistake patterns.</p>
+      </div>
+
+      <!-- Live Typing HUD -->
+      <div class="practice-hud" aria-label="Live Typing Metrics">
+        <div class="hud-group">
+          <div class="hud-item">
+            <span class="hud-label">Speed</span>
+            <span class="hud-val accent" id="hudWpm">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">Accuracy</span>
+            <span class="hud-val" id="hudAcc">100%</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">Typos</span>
+            <span class="hud-val" id="hudErrors">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">Time</span>
+            <span class="hud-val" id="hudTimer">0s</span>
+          </div>
+        </div>
+
+        <div>
+          <span class="hud-pacing-badge pacing-good" id="hudPacing">Clean Cadence</span>
+        </div>
+      </div>
+
+      <!-- Words Typing Arena -->
+      <div class="drill-display-area" id="practiceWordsContainer" tabindex="0" title="Click or tap to focus and type">
+        <!-- Drill words injected dynamically -->
+      </div>
+
+      <!-- Hidden Input for cross-platform / mobile keyboard compatibility -->
+      <input type="text" id="practiceHiddenInput" class="hidden-typing-input" autocomplete="off" autocapitalize="none" spellcheck="false">
+
+      <div class="practice-footer">
+        <div class="practice-shortcut-hint">
+          <span>Shortcuts:</span>
+          <span class="kbd">Esc</span> <span>Restart</span>
+          <span class="kbd">Space</span> <span>Next Word</span>
+          <span class="kbd">Ctrl + Backspace</span> <span>Clear Word</span>
+        </div>
+        <div>
+          <span>Tip: Focus strictly on 0 errors. Speed will follow naturally.</span>
+        </div>
+      </div>
+
+      <!-- Post-Drill Modal Summary -->
+      <div id="modal-drill-summary" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 class="modal-title">⚡ Drill Completed</h3>
+            <button type="button" class="modal-close-btn" id="btn-close-modal">&times;</button>
+          </div>
+
+          <div class="modal-stats-grid">
+            <div class="modal-stat-box">
+              <div class="modal-stat-label">Speed</div>
+              <div class="modal-stat-val modal-stat-wpm">0 WPM</div>
+            </div>
+            <div class="modal-stat-box">
+              <div class="modal-stat-label">Accuracy</div>
+              <div class="modal-stat-val modal-stat-acc">0%</div>
+            </div>
+            <div class="modal-stat-box">
+              <div class="modal-stat-label">Duration</div>
+              <div class="modal-stat-val modal-stat-time">0s</div>
+            </div>
+          </div>
+
+          <div class="modal-feedback"></div>
+          <div class="modal-mistakes" style="margin-bottom: 16px;"></div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-primary btn-save-drill">Save Result to History</button>
+            <button type="button" class="btn-secondary" id="btn-modal-retry">Retry Drill</button>
+            <button type="button" class="btn-secondary" id="btn-modal-next">Next Drill</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 4: MISTAKE HEATMAP & PATTERN ANALYSIS
+         ======================================================== -->
+    <section id="view-heatmap" class="view-section">
+      <div class="mistake-analysis-grid">
+        <!-- Visual Keyboard Heatmap -->
+        <div class="card-section">
+          <div class="section-header">
+            <h2 class="section-title">⌨️ Keyboard Error Heatmap</h2>
+            <span class="field-hint">Click any key to generate a targeted isolation drill</span>
+          </div>
+
+          <div id="keyboardHeatmapContainer"></div>
+
+          <div class="chart-legend" style="margin-top: 18px;">
+            <div class="legend-item"><span class="legend-dot" style="background: var(--bg-secondary); border: 1px solid var(--border);"></span> Clean (0 errors)</div>
+            <div class="legend-item"><span class="legend-dot" style="background: rgba(226, 183, 20, 0.4);"></span> Low errors</div>
+            <div class="legend-item"><span class="legend-dot" style="background: rgba(237, 137, 54, 0.7);"></span> Moderate errors</div>
+            <div class="legend-item"><span class="legend-dot" style="background: rgba(202, 71, 84, 0.9);"></span> High error frequency</div>
+          </div>
+        </div>
+
+        <!-- Problem Bigrams & Words List -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Top Missed Bigrams -->
+          <div class="card-section">
+            <h2 class="section-title">🔗 Problem Key Pairs (N-Grams)</h2>
+            <p class="field-hint" style="margin-bottom: 12px;">Frequent finger transitions where typos occur:</p>
+            <ul id="list-top-bigrams" class="mistake-list">
+              <li class="text-muted">No data yet.</li>
+            </ul>
+          </div>
+
+          <!-- Top Problem Words -->
+          <div class="card-section">
+            <h2 class="section-title">📖 Difficult Words Ranking</h2>
+            <p class="field-hint" style="margin-bottom: 12px;">Words you repeatedly missed in Monkeytype:</p>
+            <ul id="list-top-words" class="mistake-list">
+              <li class="text-muted">No data yet.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 5: SETTINGS & DATA MANAGEMENT
+         ======================================================== -->
+    <section id="view-settings" class="view-section">
+      <div class="card-section">
+        <h2 class="section-title">⚙️ Coach Settings &amp; Preferences</h2>
+        
+        <div class="settings-list" style="margin-top: 20px;">
+          <!-- Accuracy Target -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-title">Target Accuracy Goal</div>
+              <div class="setting-desc">The benchmark accuracy you strive to maintain. Pacing coach will alert you to slow down if your recent runs fall below this. (Recommended: 96% - 98%)</div>
+            </div>
+            <div class="setting-control">
+              <input type="range" id="setting-target-acc" class="range-slider" min="90" max="99" step="1" value="96">
+              <span id="target-acc-value" class="font-bold text-accent" style="min-width: 45px;">96%</span>
+            </div>
+          </div>
+
+          <!-- Keystroke Sound Effects -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-title">Mechanical Switch Sounds</div>
+              <div class="setting-desc">Synthesized mechanical key acoustics generated locally with Web Audio API.</div>
+            </div>
+            <div class="setting-control">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; margin: 0;">
+                <input type="checkbox" id="setting-sound-toggle" checked style="width: auto;">
+                <span>Enable Sound</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sound Profile & Volume -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-title">Sound Profile &amp; Volume</div>
+              <div class="setting-desc">Select switch acoustics and adjust output volume.</div>
+            </div>
+            <div class="setting-control">
+              <select id="setting-sound-type" style="width: 110px;">
+                <option value="thock">Thock</option>
+                <option value="clack">Clack</option>
+                <option value="click">Crisp Click</option>
+              </select>
+              <input type="range" id="setting-sound-volume" class="range-slider" min="0.05" max="0.5" step="0.05" value="0.18" style="width: 80px;">
+              <button type="button" class="btn-secondary" id="btn-test-sound">🔊 Test</button>
+            </div>
+          </div>
+
+          <!-- Color Theme -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-title">Color Theme</div>
+              <div class="setting-desc">Choose a theme inspired by favorite Monkeytype aesthetics.</div>
+            </div>
+            <div class="setting-control">
+              <select id="setting-theme" style="width: 150px;">
+                <option value="serika">Serika Dark</option>
+                <option value="dark">Stealth Dark</option>
+                <option value="matrix">Matrix Green</option>
+                <option value="light">Paper Light</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Backup & Reset -->
+      <div class="card-section" style="margin-top: 24px;">
+        <h2 class="section-title">💾 Local Data Management</h2>
+        <p class="field-hint" style="margin-bottom: 20px;">
+          All your typing tests and mistake data are stored 100% locally in your browser. You can export a backup or restore data anytime.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button type="button" class="btn-secondary" id="btn-export-data">📥 Export JSON Backup</button>
+          
+          <label class="btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; margin: 0; text-transform: none;">
+            📤 Import JSON Backup
+            <input type="file" id="input-import-file" accept=".json" style="display: none;">
+          </label>
+
+          <button type="button" class="btn-secondary" id="btn-load-sample-data">🧪 Load Sample Data</button>
+          <button type="button" class="btn-secondary" id="btn-clear-all-data" style="color: var(--danger);">🗑️ Clear All History</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/coach.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/practice.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
